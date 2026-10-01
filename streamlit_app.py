@@ -310,8 +310,9 @@ st.info(current_summary(time_idx, d), icon="ℹ️")
 st.divider()
 st.subheader("오늘의 침상 운영 제안")
 st.caption(
-    "53개 침상을 모두 고정 배정하지 않고, 장시간 치료 / 빠른 회전 / 공용 조정으로 나누어 "
-    "운영하는 Prototype 제안입니다. 실제 환자별 침상 점유시간 자료가 들어오면 이 계산식을 보정합니다."
+    "53개 침상을 고정된 전용 침상으로 나누는 것이 아니라, 장시간 치료에 우선 사용할 침상과 "
+    "빠른 회전을 위해 보호할 침상, 상황에 따라 유동적으로 사용할 침상의 권장 배분을 제시하는 "
+    "Prototype입니다. 실제 환자별 침상 점유시간 자료가 들어오면 이 계산식을 보정합니다."
 )
 
 long_beds, quick_beds, flex_beds = bed_allocation(openrun, protocol, time_idx, d)
@@ -320,7 +321,7 @@ b1, b2, b3 = st.columns(3)
 
 with b1:
     with st.container(border=True):
-        st.markdown("**장시간 치료용**")
+        st.markdown("**장시간 치료 우선**")
         st.markdown(f"## {long_beds}개")
         st.caption(
             "프로토콜 항암 등 장시간 침상 점유가 예상되는 환자를 우선 배치하는 영역"
@@ -328,7 +329,7 @@ with b1:
 
 with b2:
     with st.container(border=True):
-        st.markdown("**빠른 회전용**")
+        st.markdown("**빠른 회전 보호**")
         st.markdown(f"## {quick_beds}개")
         st.caption(
             "짧은 치료 환자가 장시간 치료 뒤에서 오래 기다리지 않도록 회전을 보호하는 영역"
@@ -336,15 +337,15 @@ with b2:
 
 with b3:
     with st.container(border=True):
-        st.markdown("**공용 조정용**")
+        st.markdown("**유동 운영**")
         st.markdown(f"## {flex_beds}개")
         st.caption(
             "당일 추가 오더, 예상보다 긴 치료, 갑작스러운 대기 증가에 맞춰 유연하게 사용하는 영역"
         )
 
-st.progress(long_beds / 53, text=f"장시간 치료용 {long_beds}/53")
-st.progress(quick_beds / 53, text=f"빠른 회전용 {quick_beds}/53")
-st.progress(flex_beds / 53, text=f"공용 조정용 {flex_beds}/53")
+st.progress(long_beds / 53, text=f"장시간 치료 우선 {long_beds}/53")
+st.progress(quick_beds / 53, text=f"빠른 회전 보호 {quick_beds}/53")
+st.progress(flex_beds / 53, text=f"유동 운영 {flex_beds}/53")
 
 if time_idx == 0:
     st.info(
